@@ -1,4 +1,6 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import "@fontsource/poppins"
+import Layout from '../components/layout'
 
 const config = {
   useSystemColorMode: false,
@@ -10,16 +12,17 @@ const customTheme = extendTheme({
     global: {
       // styles for the `body`
       body: {
-        width: 'sm',
-        minH: '12em',
-        p: '4',
-        bgGradient: 'linear(to-br, #d4e9bc, #f2f5c0)'
+        
       },
     }
   },
+  fonts: {
+    heading: 'Poppins, sans-serif',
+    body: 'Poppins, sans-serif'
+  },
   colors: {
     brand: {
-      500: '#0eaf1b'
+      
     }
   }
   ,config });
@@ -27,7 +30,9 @@ const customTheme = extendTheme({
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={customTheme}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ChakraProvider>
   )
 }

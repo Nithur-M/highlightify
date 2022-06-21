@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Flex, Image, Slider, 
+import { Button, Flex, Image, Text, Slider, 
     SliderFilledTrack, SliderTrack, SliderThumb,
     Radio, RadioGroup, Stack } from "@chakra-ui/react"
 
 const Home = () => {
     const [size, setSize] = useState('25');
-    const [color, setColor] = useState('#fffb78');
+    const [color, setColor] = useState('yellow');
     
     const hiddenFileInput = React.useRef(null);
 
@@ -69,38 +69,32 @@ const Home = () => {
         var started = false;
         var prvX = -300;
         var prvY = -300;
+
+        let backupCanvas = document.createElement("canvas");
+        let backupCanvasContext = backupCanvas.getContext("2d");
+        backupCanvas.width = canvasElement.width;
+        backupCanvas.height = canvasElement.height;
+        let backupCreated = false;
     
         canvasElement.onmousedown = (e) => {
-            // isDrawing = true;
-            // context.beginPath();
-            // context.globalCompositeOperation = "multiply"; //<<<<
-            // context.lineWidth = size;
-            // context.strokeStyle = color;
-            // context.lineJoin = "round";
-            // context.lineCap = "round";
-            // context.moveTo(e.clientX, e.clientY);
-
+            backupCanvasContext.drawImage(canvasElement, 0, 0, canvasElement.width, canvasElement.height);
+            backupCreated = true;
             prvX = e.offsetX;
             prvY = e.offsetY;
             started = true ;
         };
     
         canvasElement.onmousemove = (e) => {
-            // if (isDrawing) {
-            //     context.lineTo(e.clientX, e.clientY);
-            //     context.stroke();
-            // }
-
             if (!started) return;
-            //context.clearRect(0,0,canvasElement.width, canvasElement.height);
+            context.globalCompositeOperation = "source-over";
+            context.drawImage(backupCanvas, 0, 0, canvasElement.width, canvasElement.height);
             context.beginPath();
-            //context.clearRect(0,0,canvasElement.width, canvasElement.height);
             context.globalCompositeOperation = "multiply"; //<<<<
             context.globalAlpha = 0.05;
             context.lineWidth = size;
             context.strokeStyle = color;
             context.lineJoin = "round";
-            context.lineCap = "round";
+            //context.lineCap = "round";
             context.moveTo(prvX, prvY);
             var dx = e.offsetX - prvX;
             var dy = e.offsetY - prvY;
@@ -112,15 +106,12 @@ const Home = () => {
         };
     
         canvasElement.onmouseup = function () {
-            // isDrawing = false;
-            // context.closePath();
-
             started = false ;
         };
     }
     
     return(
-        <Flex direction="column">
+        <Flex>
             <Button onClick={handleClick}>Add image</Button>
             <input
                 type="file"
@@ -136,28 +127,33 @@ const Home = () => {
                 width="500"
                 height="200"
             ></canvas>
-        
-            <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
-                <SliderTrack>
-                    <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb />
-            </Slider>
 
-            <RadioGroup onChange={setColor} value={color}>
-                <Stack direction='row'>
-                    <Radio value='yellow'>Yellow</Radio>
-                    <Radio value="#fffb78">Copy 1</Radio>
-                    <Radio value='white'>white</Radio>
-                    <Radio value='red'>Red</Radio>
-                    <Radio value='green'>Green</Radio>
-                    <Radio value='blue'>Blue</Radio>
-                    <Radio value='#BE37F0'>Purple</Radio>
-                </Stack>
-            </RadioGroup>
-            <Button id="clear">Clear</Button>
+            <Flex direction="column">
+                <Flex direction="column" w="md" border="1px" borderColor="gray.300" borderRadius="lg">
+                    <Text>Brush</Text>
+                    <Text>Size</Text>
+                    <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
+                        <SliderTrack>
+                            <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                    </Slider>
+                    <Text>Color</Text>
+                    <RadioGroup onChange={setColor} value={color}>
+                        <Stack direction='row'>
+                            <Radio value='yellow'>Yellow</Radio>
+                            <Radio value='#FF3939'>Red</Radio>
+                            <Radio value='#25E712'>Green</Radio>
+                            <Radio value='#1AE9C7'>Blue</Radio>
+                            <Radio value='#F522E3'>Purple</Radio>
+                        </Stack>
+                </RadioGroup>
+                </Flex>
+            
+                <Button id="clear">Clear</Button>
+            </Flex>
         </Flex>
     )
 }
-
+//#BE37F0
 export default Home;
