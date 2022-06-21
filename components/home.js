@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Flex, Image, Text, Slider, 
     SliderFilledTrack, SliderTrack, SliderThumb,
-    Radio, RadioGroup, Stack } from "@chakra-ui/react"
+    Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
+
+import RadioCard from './radio';
 
 const Home = () => {
     const [size, setSize] = useState('25');
@@ -109,6 +111,14 @@ const Home = () => {
             started = false ;
         };
     }
+
+    const options = ['yellow', '#ff6060', '#25E712', '#1AE9C7', '#F522E3']
+
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'color',
+        defaultValue: 'yellow',
+        onChange: setColor,
+    })
     
     return(
         <Flex>
@@ -129,25 +139,27 @@ const Home = () => {
             ></canvas>
 
             <Flex direction="column">
-                <Flex direction="column" w="md" border="1px" borderColor="gray.300" borderRadius="lg">
-                    <Text>Brush</Text>
-                    <Text>Size</Text>
+                <Flex direction="column" w="sm" border="1px" p="2" borderColor="gray.300" borderRadius="lg">
+                    <Text fontSize="lg">Brush</Text>
+                    <Text>Size:</Text>
                     <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
                         <SliderTrack>
                             <SliderFilledTrack />
                         </SliderTrack>
                         <SliderThumb />
                     </Slider>
-                    <Text>Color</Text>
-                    <RadioGroup onChange={setColor} value={color}>
-                        <Stack direction='row'>
-                            <Radio value='yellow'>Yellow</Radio>
-                            <Radio value='#FF3939'>Red</Radio>
-                            <Radio value='#25E712'>Green</Radio>
-                            <Radio value='#1AE9C7'>Blue</Radio>
-                            <Radio value='#F522E3'>Purple</Radio>
-                        </Stack>
-                </RadioGroup>
+
+                    <Text>Color:</Text>
+                    <Stack direction='row'>
+                        {options.map((value) => {
+                        const radio = getRadioProps({ value })
+                        return (
+                        <RadioCard key={value} {...radio}>
+                            {value}
+                        </RadioCard>
+                        )
+                    })}
+                    </Stack>
                 </Flex>
             
                 <Button id="clear">Clear</Button>
