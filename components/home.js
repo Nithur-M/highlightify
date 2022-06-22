@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Flex, Image, Text, Slider, 
+import { Button, Flex, Box, Text, Slider, 
     SliderFilledTrack, SliderTrack, SliderThumb,
     Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
 
@@ -7,6 +7,7 @@ import RadioCard from './radio';
 
 const Home = () => {
     const [size, setSize] = useState('25');
+    const [imageUploaded, setImageUploaded] = useState(false);
     const [color, setColor] = useState('yellow');
     
     const hiddenFileInput = React.useRef(null);
@@ -20,6 +21,7 @@ const Home = () => {
         //const img = await fileToDataUri(file); //URL.createObjectURL(file);
         const image = document.createElement("img");
         image.src = await fileToDataUri(file);
+        setImageUploaded(true);
     
         // enabling the brush after after the image
         // has been uploaded
@@ -65,9 +67,9 @@ const Home = () => {
         const clearElement = document.getElementById("clear");
         clearElement.onclick = () => {
             context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            setImageUploaded(false);
         };
     
-        let isDrawing;
         var started = false;
         var prvX = -300;
         var prvY = -300;
@@ -119,50 +121,76 @@ const Home = () => {
         defaultValue: 'yellow',
         onChange: setColor,
     })
+
+    const saveImage = () => {
+        const canvas = document.getElementById("canvas");
+        const link = document.createElement('a');
+        link.download = `highlightify-${new Date().toISOString()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        link.delete;
+    }
     
     return(
         <Flex>
-            <Button onClick={handleClick}>Add image</Button>
-            <input
-                type="file"
-                name="image"
-                accept="image/x-png,image/jpeg"
-                ref={hiddenFileInput}
-                onChange={(e)=> {uploadImage(e);}}
-                style={{display: 'none'}}
-            />
-            
-            <canvas
-                id="canvas"
-                width="500"
-                height="200"
-            ></canvas>
+            <Flex direction="column" align="center" w="4xl" mt="4" >
+                {!imageUploaded &&
+                <Box as="button" mt="24" w="md" h="24" borderRadius="lg" 
+                border="1px" borderStyle="dashed"
+                _hover={{ borderColor: 'blue', color: 'blue'}}
+                 onClick={handleClick}>
+                    Add Image
+                </Box>
+                }
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/x-png,image/jpeg"
+                    ref={hiddenFileInput}
+                    onChange={(e)=> {uploadImage(e);}}
+                    style={{display: 'none'}}
+                />
+                
+                <canvas
+                    id="canvas"
+                    width="500"
+                    height="200"
+                ></canvas>
 
-            <Flex direction="column">
-                <Flex direction="column" w="sm" border="1px" p="2" borderColor="gray.300" borderRadius="lg">
-                    <Text fontSize="lg">Brush</Text>
-                    <Text>Size:</Text>
-                    <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
-                        <SliderTrack>
-                            <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb />
-                    </Slider>
+                {/* <Flex>
+                    <Text color="gray">Made by Nithur</Text>
+                </Flex> */}
+            </Flex>
+            <Flex direction="column" mt="4">
+                <Flex direction="column" border="1px" borderColor="gray.300" borderRadius="lg">
+                    <Flex bg="gray.200" borderTopRadius="lg" pl="2">
+                        <Text>Highlighter</Text>
+                    </Flex>
+                    <Flex direction="column" w="sm" p="2">
+                        <Text>Size:</Text>
+                        <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                            <SliderThumb />
+                        </Slider>
 
-                    <Text>Color:</Text>
-                    <Stack direction='row'>
-                        {options.map((value) => {
-                        const radio = getRadioProps({ value })
-                        return (
-                        <RadioCard key={value} {...radio}>
-                            {value}
-                        </RadioCard>
-                        )
-                    })}
-                    </Stack>
+                        <Text>Color:</Text>
+                        <Stack direction='row'>
+                            {options.map((value) => {
+                            const radio = getRadioProps({ value })
+                            return (
+                            <RadioCard key={value} {...radio}>
+                                {value}
+                            </RadioCard>
+                            )
+                        })}
+                        </Stack>
+                    </Flex>
                 </Flex>
             
                 <Button id="clear">Clear</Button>
+                <Button onClick={saveImage}>Save</Button>
             </Flex>
         </Flex>
     )
