@@ -12,7 +12,7 @@ const customTheme = extendTheme({
     global: {
       // styles for the `body`
       body: {
-        
+        //bgGradient: 'linear(to-br, #FAACA8, #DDD6F3)'
       },
     }
   },

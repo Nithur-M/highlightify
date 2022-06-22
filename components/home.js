@@ -19,15 +19,17 @@ const Home = () => {
     const uploadImage = async (e) => {
         const file = e.target.files[0];
         //const img = await fileToDataUri(file); //URL.createObjectURL(file);
-        const image = document.createElement("img");
-        image.src = await fileToDataUri(file);
-        setImageUploaded(true);
-    
-        // enabling the brush after after the image
-        // has been uploaded
-        image.addEventListener("load", () => {
-            drawOnImage(image);
-        });
+        if(file){
+            const image = document.createElement("img");
+            image.src = await fileToDataUri(file);
+            setImageUploaded(true);
+        
+            // enabling the brush after after the image
+            // has been uploaded
+            image.addEventListener("load", () => {
+                drawOnImage(image);
+            });
+        }
     };
 
     function fileToDataUri(field) {
@@ -135,12 +137,17 @@ const Home = () => {
         <Flex>
             <Flex direction="column" align="center" w="4xl" mt="4" >
                 {!imageUploaded &&
-                <Box as="button" mt="24" w="md" h="24" borderRadius="lg" 
+                <>
+                <Text fontSize="4xl" mt="20" fontWeight="extrabold">Highlight Text in Images</Text>
+                <Text w="sm" align="center" color="gray">Add an image. Set the relevant highlighter size. Start highlighting.</Text>
+                <Box as="button" mt="4" w="md" h="24" borderRadius="lg" 
                 border="1px" borderStyle="dashed"
-                _hover={{ borderColor: 'blue', color: 'blue'}}
+                boxShadow="2xl"
+                _hover={{ borderColor: 'purple.500', color: 'purple.500'}}
                  onClick={handleClick}>
                     Add Image
                 </Box>
+                </>
                 }
                 <input
                     type="file"
@@ -155,20 +162,23 @@ const Home = () => {
                     id="canvas"
                     width="500"
                     height="200"
+                    style={{ cursor: `<svg width="512px" height="512px">
+                    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/>
+                </svg>`}}
                 ></canvas>
 
                 {/* <Flex>
                     <Text color="gray">Made by Nithur</Text>
                 </Flex> */}
             </Flex>
-            <Flex direction="column" mt="4">
-                <Flex direction="column" border="1px" borderColor="gray.300" borderRadius="lg">
+            <Flex direction="column" mt="4" gap="2">
+                <Flex direction="column" border="1px" borderColor="gray.300" boxShadow="2xl" borderRadius="lg">
                     <Flex bg="gray.200" borderTopRadius="lg" pl="2">
                         <Text>Highlighter</Text>
                     </Flex>
-                    <Flex direction="column" w="sm" p="2">
+                    <Flex direction="column" w="sm" gap="2" p="2">
                         <Text>Size:</Text>
-                        <Slider aria-label='slider-ex-1' min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
+                        <Slider aria-label='slider-ex-1' colorScheme="purple" min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
                             <SliderTrack>
                                 <SliderFilledTrack />
                             </SliderTrack>
@@ -188,9 +198,13 @@ const Home = () => {
                         </Stack>
                     </Flex>
                 </Flex>
-            
+
+                <Flex mt="8" gap="2">
+                    <Button w="full">Undo</Button>
+                    <Button w="full">Redo</Button>
+                </Flex>
                 <Button id="clear">Clear</Button>
-                <Button onClick={saveImage}>Save</Button>
+                <Button colorScheme="purple" onClick={saveImage}>Save</Button>
             </Flex>
         </Flex>
     )
