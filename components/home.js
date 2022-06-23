@@ -166,7 +166,7 @@ const Home = () => {
                 :
                 <canvas
                     id="canvas"
-                    class="canvas"
+                    className="canvas"
                     width="500"
                     height="200"
                     style={{ maxHeight: '450px', maxWidth: '1050px'}}
