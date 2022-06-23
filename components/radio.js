@@ -12,11 +12,11 @@ function RadioCard(props) {
         <Circle
             {...checkbox}
             cursor='pointer'
-            borderWidth="1px"
+            borderWidth="2px"
             bg={props.children}
             size="30px"
             _checked={{
-                borderColor: 'teal.500',
+                borderColor: 'purple.400',
               }}/>
       </Flex>
     )

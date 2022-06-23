@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Flex, Box, Text, Slider, 
     SliderFilledTrack, SliderTrack, SliderThumb,
-    Radio, RadioGroup, Stack, useRadioGroup } from "@chakra-ui/react";
+    Stack, useRadioGroup, Icon } from "@chakra-ui/react";
 
+import { IoMdRedo, IoMdUndo, IoMdTrash, IoMdDownload, IoIosCafe, IoLogoTwitter, IoIosAdd } from "react-icons/io";
+import CustomCursor from 'custom-cursor-react';
+import 'custom-cursor-react/dist/index.css';
 import RadioCard from './radio';
 
 const Home = () => {
@@ -46,7 +49,7 @@ const Home = () => {
 
     useEffect(()=>{
         const image = document.getElementById('image');
-        drawOnImage(image);
+        imageUploaded && drawOnImage(image);
     }, [color, size])
 
     function drawOnImage(image = null) {
@@ -73,8 +76,8 @@ const Home = () => {
         };
     
         var started = false;
-        var prvX = -300;
-        var prvY = -300;
+        var prvX = 0;
+        var prvY = 0;
 
         let backupCanvas = document.createElement("canvas");
         let backupCanvasContext = backupCanvas.getContext("2d");
@@ -136,7 +139,7 @@ const Home = () => {
     return(
         <Flex>
             <Flex direction="column" align="center" w="4xl" mt="4" >
-                {!imageUploaded &&
+                {!imageUploaded ?
                 <>
                 <Text fontSize="4xl" mt="20" fontWeight="extrabold">Highlight Text in Images</Text>
                 <Text w="sm" align="center" color="gray">Add an image. Set the relevant highlighter size. Start highlighting.</Text>
@@ -145,10 +148,12 @@ const Home = () => {
                 boxShadow="2xl"
                 _hover={{ borderColor: 'purple.500', color: 'purple.500'}}
                  onClick={handleClick}>
-                    Add Image
+                    <Flex justify="center">
+                        <Icon as={IoIosAdd} w={6} h={6}/>
+                        <Text>Add Image</Text>
+                    </Flex>
                 </Box>
-                </>
-                }
+                
                 <input
                     type="file"
                     name="image"
@@ -157,28 +162,54 @@ const Home = () => {
                     onChange={(e)=> {uploadImage(e);}}
                     style={{display: 'none'}}
                 />
-                
+                </>
+                :
                 <canvas
                     id="canvas"
+                    class="canvas"
                     width="500"
                     height="200"
-                    style={{ cursor: `<svg width="512px" height="512px">
-                    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/>
-                </svg>`}}
+                    style={{ maxHeight: '450px', maxWidth: '1050px'}}
+                //     style={{ cursor: `<svg width="512px" height="512px">
+                //     <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/>
+                // </svg>`}}
                 ></canvas>
+                }
+                <Flex mt="32" gap="2" color="gray">
+                    <Flex align="center" gap="1" cursor="pointer" onClick={() => window.open("https://twitter.com/NithurM", '_blank')}>
+                        <Icon as={IoLogoTwitter} color="gray.600" />
+                        <Text _hover={{ textDecoration: 'underline' }} >Made by Nithur</Text>
+                    </Flex>
+                    •
+                    <Flex align="center" gap="1" cursor="pointer" onClick={() => window.open("https://www.buymeacoffee.com/nithur", '_blank')}>
+                        <Icon as={IoIosCafe} color="gray.600"/>
+                        <Text _hover={{ textDecoration: 'underline' }}>Buy me a coffee</Text>
+                    </Flex>
+                </Flex>
 
-                {/* <Flex>
-                    <Text color="gray">Made by Nithur</Text>
-                </Flex> */}
+                <CustomCursor
+                    targets={['.settings', '.canvas']}
+                    customClass='custom-cursor'
+                    dimensions={size*2}
+                    fill={color}
+                    
+                    targetScale={1}
+                    smoothness={{
+                        movement: 1,
+                        scale: 0.1,
+                        opacity: 0.2,
+                    }}
+                    targetOpacity={0.5}
+                />
             </Flex>
             <Flex direction="column" mt="4" gap="2">
-                <Flex direction="column" border="1px" borderColor="gray.300" boxShadow="2xl" borderRadius="lg">
+                <Flex direction="column" className='settings' border="1px" borderColor="gray.300" boxShadow="2xl" borderRadius="lg">
                     <Flex bg="gray.200" borderTopRadius="lg" pl="2">
                         <Text>Highlighter</Text>
                     </Flex>
                     <Flex direction="column" w="sm" gap="2" p="2">
                         <Text>Size:</Text>
-                        <Slider aria-label='slider-ex-1' colorScheme="purple" min={1} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
+                        <Slider aria-label='slider-ex-1' colorScheme="purple" min={15} max={50} defaultValue={25} onChangeEnd={(val) => setSize(val)}>
                             <SliderTrack>
                                 <SliderFilledTrack />
                             </SliderTrack>
@@ -200,11 +231,11 @@ const Home = () => {
                 </Flex>
 
                 <Flex mt="8" gap="2">
-                    <Button w="full">Undo</Button>
-                    <Button w="full">Redo</Button>
+                    <Button w="full" leftIcon={<Icon as={IoMdUndo} />}>Undo</Button>
+                    <Button w="full" leftIcon={<Icon as={IoMdRedo} />}>Redo</Button>
                 </Flex>
-                <Button id="clear">Clear</Button>
-                <Button colorScheme="purple" onClick={saveImage}>Save</Button>
+                <Button id="clear" leftIcon={<Icon as={IoMdTrash} />}>Clear</Button>
+                <Button colorScheme="purple" onClick={saveImage} leftIcon={<Icon as={IoMdDownload} />}>Save</Button>
             </Flex>
         </Flex>
     )
