@@ -1923,7 +1923,7 @@
     "merge2" "^1.4.1"
     "slash" "^3.0.0"
 
-"gsap@^3.5.1":
+"gsap@^3.10.4", "gsap@^3.5.1":
   "integrity" "sha512-6QatdkKxXCMfvCW4rM++0RqyLQAzFX5nwl3yHS0XPgkZBkiSEY3VZVbMltrdtsbER/xZonLtyHt684wRp4erlQ=="
   "resolved" "https://registry.npmjs.org/gsap/-/gsap-3.10.4.tgz"
   "version" "3.10.4"
