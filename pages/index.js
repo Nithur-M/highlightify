@@ -15,7 +15,7 @@ export default function Index() {
         <meta property="twitter:url" content="highlightify.vercel.app" />
         <meta property="twitter:title" content="Highlight Text in Images" />
         <meta property="twitter:description" content="A simple text highlighter for images. Highlight text on images before sharing on Twitter. " />
-        <meta property="twitter:image" content="https://github.com/Nithur-M/PubImages/blob/main/Highlight%20Text%20in%20Images.png"/>
+        <meta property="twitter:image" content="https://raw.githubusercontent.com/Nithur-M/PubImages/main/Highlight%20Text%20in%20Images.png"/>
       </Head>
 
       <Flex>
