@@ -11,6 +11,7 @@ export default function Index() {
         <link rel="icon" href="/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="highlightify.vercel.app" />
         <meta property="twitter:title" content="Highlight Text in Images" />
         <meta property="twitter:description" content="A simple text highlighter for images. Highlight text on images before sharing on Twitter. " />
