@@ -50,11 +50,12 @@ const Home = () => {
     useEffect(()=>{
         const image = document.getElementById('image');
         imageUploaded && drawOnImage(image);
-    }, [color, size])
+    }, [color, size]);
 
     function drawOnImage(image = null) {
         const canvasElement = document.getElementById("canvas");
         const context = canvasElement.getContext("2d");
+
     
         // if an image is present,
         // the image passed as parameter is drawn in the canvas
@@ -63,10 +64,10 @@ const Home = () => {
             const imageHeight = image.height;
     
             // rescaling the canvas element
-            canvasElement.width = imageWidth;
-            canvasElement.height = imageHeight;
+            canvasElement.width = imageWidth > '800' ? '800' : imageWidth;
+            canvasElement.height = (canvasElement.width * imageHeight)/imageWidth
     
-            context.drawImage(image, 0, 0, imageWidth, imageHeight);
+            context.drawImage(image, 0, 0, canvasElement.width, canvasElement.height);
         }
     
         const clearElement = document.getElementById("clear");
@@ -128,7 +129,6 @@ const Home = () => {
     })
 
     const saveImage = () => {
-        const canvas = document.getElementById("canvas");
         const link = document.createElement('a');
         link.download = `highlightify-${new Date().toISOString()}.png`;
         link.href = canvas.toDataURL();
@@ -165,14 +165,13 @@ const Home = () => {
                 </>
                 :
                 <canvas
-                    id="canvas"
-                    className="canvas"
-                    width="500"
-                    height="200"
-                    style={{ maxHeight: '450px', maxWidth: '1050px'}}
-                //     style={{ cursor: `<svg width="512px" height="512px">
-                //     <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/>
-                // </svg>`}}
+                id="canvas"
+                className="canvas"
+                width="500"
+                height="200"
+            //     style={{ cursor: `<svg width="512px" height="512px">
+            //     <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/>
+            // </svg>`}}
                 ></canvas>
                 }
                 <Flex mt="32" gap="2" color="gray">
@@ -192,7 +191,6 @@ const Home = () => {
                     customClass='custom-cursor'
                     dimensions={size*2}
                     fill={color}
-                    
                     targetScale={1}
                     smoothness={{
                         movement: 1,
